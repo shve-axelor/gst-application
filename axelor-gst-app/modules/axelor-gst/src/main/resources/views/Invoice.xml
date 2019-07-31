@@ -30,8 +30,7 @@
 	</grid>
 
 	<form model="com.axelor.gst.db.Invoice" title="Invoices" name="invoice-form"
-		onNew="action-gst-invoice-record-default-dt,action-gst-invoice-validate-company,action-gst-invoice-method-invoiceitems,action-gst-invoice-method-set-invoiceline"
-		onSave="action-gst-invoice-method-set-reference">
+		onNew="action-gst-invoice-record-default-dt,action-gst-invoice-validate-company,action-gst-invoice-method-invoiceitems,action-gst-invoice-method-set-invoiceline">
 		<toolbar>
 			<button name="btn-print-invoice-report" showIf="id"
 				onClick="action-gst-invoice-method-report-print,action-gst-invoice-report-print"
@@ -74,8 +73,7 @@
 				colSpan="12" onClick="action-gst-invoice-attrs-status-draft"
 				showIf="status == 'Validated'" />
 			<button name="btn-validated" title="validated" hidden="true"
-				colSpan="12"
-				onClick="save,action-gst-invoice-attrs-status-validated,action-gst-invoice-method-set-reference"
+				colSpan="12" onClick="save,action-gst-invoice-attrs-status-validated"
 				showIf="status == 'Draft'" />
 			<button name="btn-paid" title="paid" hidden="true" colSpan="12"
 				onClick="action-gst-invoice-validate-status,action-gst-invoice-attrs-status-paid,save"
@@ -167,10 +165,6 @@
 		<call class="com.axelor.gst.web.InvoiceController" method="setInvoiceNetFields" />
 	</action-method>
 
-	<action-method name="action-gst-invoice-method-set-reference">
-		<call class="com.axelor.gst.web.SequenceController" method="setReferenceInvoice" />
-	</action-method>
-
 	<action-report output="in-${date}${time}" name="action-gst-invoice-report-print"
 		design="invoicereport.rptdesign" format="pdf">
 		<param name="invoiceId" expr="eval: id" />
@@ -199,6 +193,8 @@
 
 	<action-export name="export.gst.invoice" output="${name}/${date}${time}"
 		download="true">
-		<export name="${reference}.xml" template="data-export/export-gst-invoice.st"  />
+		<export name="${reference}.xml" template="data-export/export-gst-invoice.st" />
 	</action-export>
+
+
 </object-views>
