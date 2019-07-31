@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<grid model="com.axelor.gst.db.Sequence" title="Sequences" name="sequence-grid">
+		<field name="prefix" required="true" />
+		<field name="suffix" />
+		<field name="padding" min="1" max="10" />
+		<field name="nextNumbers" />
+		<field name="model" />
+	</grid>
+
+	<form model="com.axelor.gst.db.Sequence" title="Sequences" name="sequence-form" onSave="action-gst-sequence-next-number">
+		<panel title="Sequence Details">
+			<field name="prefix" required="true" />
+			<field name="suffix" />
+			<field name="padding" min="1" max="10" />		
+			<field name="nextNumbers" readonly="true" />
+			<field name="model" required="true" />
+			<field name="nextNumber" hidden="true" />
+		</panel>
+		<panel sidebar="true">
+			<field name="createdOn" />
+			<field name="updatedOn" />
+		</panel>
+	</form>
+	
+	<action-method name="action-gst-sequence-next-number">
+		<call class="com.axelor.gst.web.SequenceController" method="setSequenceNextNumber"/>
+	</action-method>
+</object-views>

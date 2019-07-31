@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<grid model="com.axelor.gst.db.Product" title="Products" name="product-grid">
+		<toolbar>
+			<button name="btn-add-products-in-invoice" title="Create Invoice"
+				onClick="action-gst-product-view-create-wizard" />
+			<button name="btn-print-product-report"
+				onClick="action-gst-product-method-pritn-selected-products,action-gst-product-report-print"
+				title="Print" />
+		</toolbar>
+		<field name="productName" required="true" />
+		<field name="productCode" required="true" />
+		<field name="hsbn" />
+		<field name="category" />
+		<field name="salePrice" />
+		<field name="costPrice" />
+		<field name="image" widget="Image" />
+		<field name="gstRate" />
+	</grid>
+
+	<form model="com.axelor.gst.db.Product" title="Products" name="product-form">
+		<panel title="Product Details">
+			<field name="image" widget="Image" />
+			<field name="category" onChange="action-gst-product-method-gstrate" />
+			<field name="productName" required="true" />
+			<field name="productCode" required="true" />
+			<field name="hsbn" />	
+			<field name="salePrice" />
+			<field name="costPrice" />
+			<field name="gstRate" readonly="true" />
+		</panel>
+		<panel sidebar="true">
+			<field name="createdOn" />
+			<field name="updatedOn" />
+		</panel>
+	</form>
+	
+	<cards name="product-cards" title="Products" model="com.axelor.gst.db.Product" orderBy="productName">
+    <field name="productName" />
+    <field name="productCode" />
+    <field name="salePrice" />
+    <field name="category" />
+    <field name="image" />
+    <template><![CDATA[
+      <div class="span4 card-image">
+        <img ng-if="image" ng-src="{{$image(null, 'image')}}">
+        <img ng-if="!image" src="img/user.png">  
+      </div>
+      <div class="span8">
+         <strong>[{{productCode}}]{{productName}}</strong>
+          <label>Product Category:- {{category.productCategoryName}}</label>
+         <label>SalePrice:- {{salePrice}}</label>      
+      </div>
+    ]]></template>
+  </cards>
+  
+  
+  <form model="com.axelor.gst.db.Wizard" title="Select Following Fields"
+		name="product-invoice-wizard">
+		<panel>
+			<field name="party" target="com.axelor.gst.db.Party" title="Paty"
+				widget="ManyToOne" />
+			<field name="company" target="com.axelor.gst.db.Company" title="Company"
+				widget="ManyToOne" />
+		</panel>
+		<panel>
+			<button name="btn-gst-wizard-create-invoice" title="Create Invoice"
+				onClick="action-gst-product-view-create-invoice" />
+		</panel>
+	</form>
+
+	<action-method name="action-gst-product-method-gstrate">
+		<call class="com.axelor.gst.web.ProductController" method="setGstRate" />
+	</action-method>
+
+	<action-method name="action-gst-product-method-pritn-selected-products">
+		<call class="com.axelor.gst.web.ProductController" method="setReportParam" />
+	</action-method>
+
+	<action-report format="pdf" output="pro-${date}${time}" 
+		name="action-gst-product-report-print" design="productreport.rptdesign">
+		<param name="productIds" expr="eval: productIds" />
+		<param name="attachments" expr="eval: attachments"/>
+	</action-report>
+	
+	<action-view name="action-gst-product-view-create-wizard" model="com.axelor.gst.db.Wizard" title="Create Wizard">
+		<view type="form" name="product-invoice-wizard"/>
+		<view-param name="popup" value="reload"/>
+		<view-param name="popup-save" value="false"/>
+		<view-param name="show-toolbar" value="false"/>
+ 		<view-param name="popup-close" value="true"/> 
+		<context name="productlists" expr="eval: _ids"/>
+	</action-view>
+	
+	<action-view name="action-gst-product-view-create-invoice" model="com.axelor.gst.db.Invoice" title="Create Invoice">
+		<view type="form" name="invoice-form"/>
+		<context name="productlist" expr="eval: productlists"/>
+		<context name="selectedparty" expr="eval: party"/>
+		<context name="selectedcompany" expr="eval: company"/>
+	</action-view>
+
+</object-views>

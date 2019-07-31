@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<selection name="gst.gst.invoice.status.select">
+		<option value="Draft">Draft</option>
+		<option value="Validated">Validated</option>
+		<option value="Paid">Paid</option>
+		<option value="Cancelled">Cancelled</option>
+	</selection>
+
+	<grid model="com.axelor.gst.db.Invoice" title="Invoices" name="invoice-grid">
+		<field name="status" selection="gst.gst.invoice.status.select"
+			widget="NavSelect" readonly="true" />
+		<field name="company" required="true" />
+		<field name="reference" readonly="true" />
+		<field name="currentdateT" />
+		<field name="priority" />
+		<field name="party" required="true" />
+		<field name="partyContact.name" />
+		<field name="invoiceAddress.type" required="true" />
+		<field name="shippingAddress.type" />
+		<field name="netAmount" readonly="true" />
+		<field name="netIgst" readonly="true" />
+		<field name="netCgst" readonly="true" />
+		<field name="netSgst" readonly="true" />
+		<field name="grossAmount" readonly="true" />
+	</grid>
+
+	<form model="com.axelor.gst.db.Invoice" title="Invoices" name="invoice-form"
+		onNew="action-gst-invoice-record-default-dt,action-gst-invoice-validate-company,action-gst-invoice-method-invoiceitems,action-gst-invoice-method-set-invoiceline"
+		onSave="action-gst-invoice-method-set-reference">
+		<toolbar>
+			<button name="btn-print-invoice-report" showIf="id"
+				onClick="action-gst-invoice-method-report-print,action-gst-invoice-report-print"
+				title="Print" />
+		</toolbar>
+		<panel title="Invoice Status">
+			<field name="status" selection="gst.gst.invoice.status.select"
+				widget="NavSelect" readonly="true" colSpan="12" />
+		</panel>
+
+		<panel title="Invoice Creation Details">
+			<field name="currentdateT" readonlyIf="(status == 'Paid' || status == 'Cancelled')" />
+			<field name="reference" readonly="true" colSpan="4" />
+		</panel>
+
+		<panel title="Invoice Details">
+			<field name="company" required="true" readonlyIf="(status != 'Draft')"
+				onChange="action-gst-invoice-method-invoiceitems,action-gst-invoice-validate-company" />
+			<field name="party" required="true" readonlyIf="(status != 'Draft')"
+				onChange="action-gst-invoice-attrs-set-domain,action-gst-invoice-method-set-contact-invoiceadd,action-gst-invoice-method-invoiceitems,action-gst-invoice-validate-party" />
+			<field name="partyContact" readonlyIf="(status != 'Draft')" />
+			<field name="priority" readonlyIf="(status == 'Paid' || status == 'Cancelled')" />
+			<field name="invoiceAddress" required="true" readonlyIf="(status != 'Draft')"
+				onChange="action-gst-invoice-method-invoiceitems" />
+			<field name="shippingAddress" readonlyIf="(status != 'Draft')" />
+			<field name="isInvoiced" title="InvoiceAddress As ShippingAddress"
+				onChange="action-gst-invoice-method-set-contact-invoiceadd"
+				readonlyIf="(status != 'Draft')" />
+		</panel>
+
+		<panel tile="InvoiceLine Details">
+			<panel-related field="invoiceItemsList" colSpan="12"
+				readonlyIf="(company == null || party == null || invoiceAddress == null || status == 'Paid' || status == 'Cancelled')"
+				onChange="action-gst-invoice-method-calculatefields" />
+		</panel>
+		<panel sidebar="true">
+			<button name="btn-draft" title="draft" hidden="true" colSpan="12"
+				onClick="action-gst-invoice-attrs-status-draft" showIf="status == 'Validated'" />
+			<button name="btn-validated" title="validated" hidden="true"
+				colSpan="12"
+				onClick="save,action-gst-invoice-attrs-status-validated,action-gst-invoice-method-set-reference"
+				showIf="status == 'Draft'" />
+			<button name="btn-paid" title="paid" hidden="true" colSpan="12"
+				onClick="action-gst-invoice-validate-status,action-gst-invoice-attrs-status-paid,save"
+				showIf="status == 'Validated'" />
+			<button name="btn-cancelled" title="cancelled" hidden="true"
+				colSpan="12" onClick="action-gst-invoice-attrs-status-cancelled,save"
+				showIf="status == 'Validated'" />
+		</panel>
+		<panel sidebar="true">
+			<field name="createdOn" />
+			<field name="updatedOn" />
+		</panel>
+		<panel title="Invoice Grand Total" sidebar="true">
+			<field name="netCgst" readonly="true" colSpan="6" />
+			<field name="netSgst" readonly="true" colSpan="6" />
+			<field name="netIgst" readonly="true" colSpan="6" />
+			<field name="netAmount" readonly="true" colSpan="6" />
+			<field name="grossAmount" readonly="true" />
+		</panel>
+
+		<panel-mail title="Tracker" sidebar="true">
+			<mail-messages limit="4" />
+		</panel-mail>
+	</form>
+
+	<kanban name="invoice-kanban" title="Invoices" model="com.axelor.gst.db.Invoice"
+		columnBy="status" sequenceBy="priority" limit="10">
+		<field name="company" />
+		<field name="party" />
+		<field name="priority" />
+		<field name="currentdateT" />
+		<field name="grossAmount" />
+		<hilite color="danger" if="progress == 1" />
+		<hilite color="success" if="progress == 10" />
+		<hilite color="info" if="progress >= 5" />
+		<hilite color="warning" if="progress > 1" />
+		<template><![CDATA[
+		    <h4>{{company.name}}</h4>
+		    <div class="card-body">{{grossAmount}}</div>
+		    <div class="card-footer">
+		      <i class='fa fa-clock-o'></i> <span>{{currentdateT|date:'yyyy-MM-dd HH:mm:ss'}}</span>
+		    </div>
+    		]]>
+    	</template>
+	</kanban>
+
+	<action-attrs name="action-gst-invoice-attrs-set-domain">
+		<attribute name="domain" for="partyContact" expr="self.party = :party" />
+		<attribute name="domain" for="invoiceAddress" expr="self.party = :party"/>
+		<attribute name="domain" for="shippingAddress" expr="self.party = :party"/>
+	</action-attrs>
+
+	<action-attrs name="action-gst-invoice-attrs-status-draft">
+		<attribute name="value" for="status" expr="Draft" />
+	</action-attrs>
+
+	<action-attrs name="action-gst-invoice-attrs-status-validated">
+		<attribute name="value" for="status" expr="Validated" />
+	</action-attrs>
+
+	<action-attrs name="action-gst-invoice-attrs-status-paid">
+		<attribute name="value" for="status" expr="Paid" />
+	</action-attrs>
+
+	<action-attrs name="action-gst-invoice-attrs-status-cancelled">
+		<attribute name="value" for="status" expr="Cancelled" />
+	</action-attrs>
+
+	<action-method name="action-gst-invoice-method-set-invoiceline">
+		<call class="com.axelor.gst.web.ProductController" method="setInvoicelineProducts" />
+	</action-method>
+
+	<action-record name="action-gst-invoice-record-default-dt"
+		model="com.axelor.gst.db.Invoice">
+		<field name="currentdateT" expr="eval: __datetime__" />
+		<field name="company" expr="eval: __repo__(Company).all().fetchOne() " />
+	</action-record>
+
+	<action-method name="action-gst-invoice-method-invoiceitems">
+		<call class="com.axelor.gst.web.InvoiceController" method="setInvoiceItemsList" />
+	</action-method>
+
+	<action-method name="action-gst-invoice-method-set-contact-invoiceadd">
+		<call class="com.axelor.gst.web.InvoiceController" method="setPartyContact" />
+	</action-method>
+
+	<action-method name="action-gst-invoice-method-calculatefields">
+		<call class="com.axelor.gst.web.InvoiceController" method="setInvoiceNetFields" />
+	</action-method>
+
+	<action-method name="action-gst-invoice-method-set-reference">
+		<call class="com.axelor.gst.web.SequenceController" method="setReferenceInvoice" />
+	</action-method>
+
+	<action-report output="in-${date}${time}" name="action-gst-invoice-report-print"
+		design="invoicereport.rptdesign" format="pdf">
+		<param name="invoiceId" expr="eval: id" />
+		<param name="attachment" expr="eval: attachment" />
+	</action-report>
+
+	<action-method name="action-gst-invoice-method-report-print">
+		<call class="com.axelor.gst.web.InvoiceController" method="getImagePath" />
+	</action-method>
+
+	<action-validate name="action-gst-invoice-validate-party">
+		<notify message="Party Invoice Address is Null Please Fill It First."
+			if=" party !=null &amp;&amp; (invoiceAddress == null)" />
+	</action-validate>
+
+	<action-validate name="action-gst-invoice-validate-company">
+		<error message="Company Address is Null Please Fill It First."
+			if="company != null &amp;&amp; (company.addressList == null)" />
+	</action-validate>
+
+
+	<action-validate name="action-gst-invoice-validate-status">
+		<error
+			message="You Have Not Selected Any Products For Parchase Yet. Please Select a Product First."
+			if="(invoiceItemsList.isEmpty())" />
+	</action-validate>
+
+</object-views>

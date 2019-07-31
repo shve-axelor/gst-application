@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<grid model="com.axelor.gst.db.Company" title="Companies" name="company-grid">
+		<field name="name" required="true" />
+		<field name="logo" widget="Image" />
+		<field name="contactList.type" widget="Editor" />
+		<field name="gstin" />
+		<field name="bankDetailsList.type" />
+		<field name="addressList.type" />
+	</grid>
+
+	<form model="com.axelor.gst.db.Company" title="Companies" name="company-form">
+		<panel title="Company Details">
+			<panel colSpan="8">
+				<field name="name" required="true" colSpan="4" />
+				<field name="gstin" min="15" max="15" colSpan="4" />
+			</panel>
+			<panel colSpan="4">
+				<field name="logo" widget="Image" />
+			</panel>
+		</panel>
+		<panel title="Bank Details">
+			<field name="bankDetailsList" colSpan="12" />
+		</panel>
+		<panel title="Contacts">
+			<field name="contactList" widget="Editor" colSpan="12" />
+		</panel>
+		<panel sidebar="true">
+			<field name="createdOn" />
+			<field name="updatedOn" />
+		</panel>
+		<panel sidebar="true">
+			<field name="addressList" colSpan="12">
+				<viewer><![CDATA[
+			        <address>
+			       	<strong>{{record.type}}</strong><br>
+			       	{{record.line1}} {{record.line2}}<br>
+			       	{{record.city.name}}, {{record.state.name}} - {{record.pincode}}<br>
+			       	{{record.country.name}}
+			       	</address>
+        			]]>
+        		</viewer>
+				<editor x-show-titles="false">
+					<field name="type" colSpan="12" />
+					<field name="line1" colSpan="6" />
+					<field name="line2" colSpan="6" />
+					<field name="city" colSpan="6" />
+					<field name="state" colSpan="6" />
+					<field name="country" colSpan="6" />
+					<field name="pincode" colSpan="6" />
+				</editor>
+			</field>
+		</panel>
+	</form>
+
+</object-views>

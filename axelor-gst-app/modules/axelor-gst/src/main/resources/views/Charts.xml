@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.1.xsd">
+
+	<chart onInit="action-gst-chart-attrs-setparam" name="chart.invoice.per.customer"
+		title="Unpaid Invoices Per Customer">
+		<search-fields>
+			<field type="datetime" name="fromDateTime" title="From Date" />
+			<field type="datetime" name="toDateTime" title="To Date" />
+		</search-fields>
+		<dataset type="jpql">
+		<![CDATA[
+		SELECT 
+			COUNT(self.party) AS unpaidinvoices,
+			MONTH(self.currentdateT) AS month,
+			_party.name AS customer
+		FROM 
+			Invoice self
+		LEFT JOIN
+			self.party AS _party
+		WHERE
+			YEAR(self.currentdateT) = YEAR(current_date) AND NOT self.status='Paid'
+		GROUP BY
+			_party.name,
+			MONTH(self.currentdateT)
+		ORDER BY
+			month
+		]]>
+		</dataset>
+		<category key="month" type="month" />
+		<series key="unpaidinvoices" groupBy="customer" type="bar" />
+	</chart>
+
+	<chart name="chart.party.per.state" title="Customer Per State">
+		<dataset type="sql">
+		    <![CDATA[
+		    SELECT
+		         COUNT(p.id) AS partys,
+		         p.name AS customer,
+		         st.name AS state
+		    FROM
+		        gst_party p
+		    LEFT JOIN
+		        gst_party_address_list a ON (a.gst_party = p.id)
+		  	LEFT JOIN
+		  		gst_address aa ON (a.address_list = aa.id)
+		  	LEFT JOIN
+		  		gst_state st ON (aa.state = st.id)
+		  	GROUP BY
+		  		p.name,
+		  		st.name
+		    ]]>
+    	</dataset>
+		<category key="state" />
+		<series key="partys" groupBy="customer" type="pie" />
+	</chart>
+
+	<chart name="chart.invoice.per.status" title="Invoice Per Status">
+		<dataset type="jpql">
+		<![CDATA[
+		SELECT 
+			SUM(self.grossAmount) AS amount,
+			self.status AS status,
+			_party.name AS customer
+		FROM 
+			Invoice self
+		LEFT JOIN
+			self.party AS _party
+		GROUP BY
+			_party.name,
+			self.status
+		]]>
+		</dataset>
+		<category key="status" type="text" />
+		<series key="amount" groupBy="customer" type="bar" />
+	</chart>
+
+	<chart name="chart.invoice.per.status.count" title="Number Of Invoice Per Status">
+		<dataset type="jpql">
+		<![CDATA[
+		SELECT 
+			SUM(self.grossAmount) AS amount,
+			MONTH(self.currentdateT) AS month,
+			self.status AS status
+		FROM 
+			Invoice self
+		WHERE
+			YEAR(self.currentdateT) = YEAR(current_date)
+		GROUP BY
+			MONTH(self.currentdateT),
+			self.status
+		ORDER BY
+			month
+		]]>
+		</dataset>
+		<category key="status" type="text" />
+		<series key="amount" groupBy="status" type="line" />
+	</chart>
+
+	<chart onInit="action-gst-chart-attrs-setparam" name="chart.invoice.per.category.per.product"
+		title="Invoice Per Category Per Product">
+		<search-fields>
+			<field type="datetime" name="fromDateTimeInvoice" title="From Date" />
+			<field type="datetime" name="toDateTimeInvoice" title="To Date" />
+		</search-fields>
+		<dataset type="sql">
+			<![CDATA[
+				SELECT 
+					COUNT(*) AS invoicecount,
+					pro.product_name AS products,
+					invoice.status AS status
+				FROM 
+					gst_invoice_line AS invoiceline
+				LEFT JOIN 
+					gst_product AS pro ON (invoiceline.product = pro.id)
+				LEFT JOIN 
+					gst_invoice invoice ON (invoiceline.invoice = invoice.id)	
+				GROUP BY 
+					invoice.status,
+					pro.product_name
+			]]>
+		</dataset>
+		<category key="status" type="text" />
+		<series key="invoicecount" groupBy="products" type="bar" />
+	</chart>
+
+	<action-attrs name="action-gst-chart-attrs-setparam">
+		<attribute name="value" for="toDateTime" expr="eval: __datetime__" />
+		<attribute name="value" for="fromDateTime"
+			expr="eval: __datetime__.withDayOfMonth(1)" />
+		<attribute name="value" for="toDateTimeInvoice" expr="eval: __datetime__" />
+		<attribute name="value" for="fromDateTimeInvoice"
+			expr="eval: __datetime__.withDayOfMonth(1)" />
+	</action-attrs>
+
+</object-views>

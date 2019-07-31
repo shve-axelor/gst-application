@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_5.1.xsd">
+
+	<module package="com.axelor.gst.db" name="gst" />
+
+	<entity name="Address">
+		<string name="type" title="Address Type" selection="gst.gst.address.type.select" />
+		<string name="line1" title="Line 1" />
+		<string name="line2" title="Line 2" />
+		<many-to-one name="city" title="City" ref="com.axelor.gst.db.City" />
+		<many-to-one name="state" title="State" ref="com.axelor.gst.db.State" />
+		<many-to-one name="country" title="Country"  ref="com.axelor.gst.db.Country" />
+		<many-to-one name="party" title="Party" ref="com.axelor.gst.db.Party" />
+		<string name="pincode" title="Pincode" />
+		<string name="computeaddress" namecolumn="true" search="pincode,city,state,country,line1,line2"><![CDATA[
+			return line1 + "," + line2 + "," + city.getName() + "-" + pincode + "," + state.getName() + "," + country.getName() + ".";
+		]]>
+		</string>
+	</entity>
+</domain-models>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_5.1.xsd">
+
+  <module package="com.axelor.gst.db" name="gst" />
+  
+  <entity name="Invoice">
+  	<string name="status" title="Status" default="Draft" selection="gst.gst.invoice.status.select" />
+  	<many-to-one name="company" title="Company Name" ref="com.axelor.gst.db.Company" />
+  	<string name="reference" title="Reference" />
+  	<datetime name="currentdateT" title="Date Time" />
+  	<integer name="priority" title="Priority" />
+  	<many-to-one name="party" title="Party" ref="com.axelor.gst.db.Party" />
+  	<many-to-one name="partyContact" title="Party Contacts"  ref="com.axelor.gst.db.Contact" />
+  	<many-to-one name="invoiceAddress" title="Invoice Address" ref="com.axelor.gst.db.Address" />
+  	<many-to-one name="shippingAddress" title="Shipping Address" ref="com.axelor.gst.db.Address" />
+  	<boolean name="isInvoiced" default="true" />
+  	<decimal name="netAmount" title="Net Amount" />
+  	<decimal name="netIgst" title="Net IGst"/>
+  	<decimal name="netCgst" title="Net CGst" />
+  	<decimal name="netSgst" title="Net SGst" />
+  	<decimal name="grossAmount" title="Gross Amount" />
+  	<one-to-many name="invoiceItemsList" title="Invoice Items" ref="com.axelor.gst.db.InvoiceLine" mappedBy="invoice"/>
+  	<track>
+  		<field name="status" on="ALWAYS"/>
+  		 <message if="status == 'Validated'" tag="important">Invoice validated</message>
+  		 <message if="status == 'Paid'" tag="success">Invoice Paid</message>
+  		 <message if="status == 'Draft'" tag="info">Invoice Draft</message>
+  		 <message if="status == 'Cancelled'" tag="warning">Invoice Cancelled</message>
+  	</track>
+  </entity>
+  
+  </domain-models>
