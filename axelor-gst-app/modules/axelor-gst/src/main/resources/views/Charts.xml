@@ -40,16 +40,15 @@
 		         p.name AS customer,
 		         st.name AS state
 		    FROM
-		        gst_party p
+		        gst_address aa
 		    LEFT JOIN
-		        gst_party_address_list a ON (a.gst_party = p.id)
-		  	LEFT JOIN
-		  		gst_address aa ON (a.address_list = aa.id)
+		        gst_party p ON (aa.party = p.id)
 		  	LEFT JOIN
 		  		gst_state st ON (aa.state = st.id)
 		  	GROUP BY
-		  		p.name,
-		  		st.name
+		  		aa.party,
+		  		st.name,
+		  		p.name
 		    ]]>
     	</dataset>
 		<category key="state" />

@@ -36,6 +36,7 @@
 			<button name="btn-print-invoice-report" showIf="id"
 				onClick="action-gst-invoice-method-report-print,action-gst-invoice-report-print"
 				title="Print" />
+			<button name="btnExport" title="Export" showIf="id" onClick="export.gst.invoice"/>
 		</toolbar>
 		<panel title="Invoice Status">
 			<field name="status" selection="gst.gst.invoice.status.select"
@@ -68,8 +69,9 @@
 				onChange="action-gst-invoice-method-calculatefields" />
 		</panel>
 		<panel sidebar="true">
-			<button name="btn-draft" title="draft" hidden="true" colSpan="12"
-				onClick="action-gst-invoice-attrs-status-draft" showIf="status == 'Validated'" />
+			<button name="btn-draft" title="draft" hidden="true"
+				colSpan="12" onClick="action-gst-invoice-attrs-status-draft"
+				showIf="status == 'Validated'" />
 			<button name="btn-validated" title="validated" hidden="true"
 				colSpan="12"
 				onClick="save,action-gst-invoice-attrs-status-validated,action-gst-invoice-method-set-reference"
@@ -98,8 +100,9 @@
 		</panel-mail>
 	</form>
 
-	<kanban name="invoice-kanban" title="Invoices" model="com.axelor.gst.db.Invoice"
-		columnBy="status" sequenceBy="priority" limit="10">
+	<kanban name="invoice-kanban" title="Invoices"
+		model="com.axelor.gst.db.Invoice" columnBy="status" sequenceBy="priority"
+		limit="10">
 		<field name="company" />
 		<field name="party" />
 		<field name="priority" />
@@ -116,13 +119,13 @@
 		      <i class='fa fa-clock-o'></i> <span>{{currentdateT|date:'yyyy-MM-dd HH:mm:ss'}}</span>
 		    </div>
     		]]>
-    	</template>
+		</template>
 	</kanban>
 
 	<action-attrs name="action-gst-invoice-attrs-set-domain">
 		<attribute name="domain" for="partyContact" expr="self.party = :party" />
-		<attribute name="domain" for="invoiceAddress" expr="self.party = :party"/>
-		<attribute name="domain" for="shippingAddress" expr="self.party = :party"/>
+		<attribute name="domain" for="invoiceAddress" expr="self.party = :party" />
+		<attribute name="domain" for="shippingAddress" expr="self.party = :party" />
 	</action-attrs>
 
 	<action-attrs name="action-gst-invoice-attrs-status-draft">
@@ -187,11 +190,14 @@
 			if="company != null &amp;&amp; (company.addressList == null)" />
 	</action-validate>
 
-
 	<action-validate name="action-gst-invoice-validate-status">
 		<error
 			message="You Have Not Selected Any Products For Parchase Yet. Please Select a Product First."
 			if="(invoiceItemsList.isEmpty())" />
 	</action-validate>
 
+	<action-export name="export.gst.invoice" output="${name}/${date}${time}"
+		download="true">
+		<export name="${reference}.xml" template="data-export/export-gst-invoice.st" />
+	</action-export>
 </object-views>

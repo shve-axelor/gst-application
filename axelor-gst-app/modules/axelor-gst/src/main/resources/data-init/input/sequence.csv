@@ -1,0 +1,3 @@
+prefix,suffix,padding,nextNumber,nextNumbers,model.name
+ABC,SV,5,1,ABC00001SV,Invoice
+XLR,S,6,1,XLR000001S,Party
