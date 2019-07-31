@@ -22,6 +22,7 @@ public class InvoiceLineServiceImpl implements InvoiceLineService {
         igst = netamount.multiply(invoiceline.getGstRate());
       } else {
         BigDecimal gstrate = invoiceline.getGstRate();
+        gstrate = gstrate.divide(BigDecimal.valueOf(100));
         BigDecimal multi = netamount.multiply(gstrate);
         sgst = multi.divide(BigDecimal.valueOf(2));
         cgst = sgst;

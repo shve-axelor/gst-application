@@ -7,4 +7,5 @@
 	<input file="state.csv" type="com.axelor.gst.db.State"/>
 	<input file="city.csv" type="com.axelor.gst.db.City" />
 	<input file="sequence.csv" type="com.axelor.gst.db.Sequence" />
+	<input file="productcategory.csv" type="com.axelor.gst.db.ProductCategory"></input>
 </csv-inputs>

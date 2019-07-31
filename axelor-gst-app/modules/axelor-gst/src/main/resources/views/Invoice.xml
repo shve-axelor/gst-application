@@ -36,7 +36,8 @@
 			<button name="btn-print-invoice-report" showIf="id"
 				onClick="action-gst-invoice-method-report-print,action-gst-invoice-report-print"
 				title="Print" />
-			<button name="btnExport" title="Export" showIf="id" onClick="export.gst.invoice"/>
+			<button name="btnExport" title="Export" showIf="id"
+				onClick="export.gst.invoice" />
 		</toolbar>
 		<panel title="Invoice Status">
 			<field name="status" selection="gst.gst.invoice.status.select"
@@ -50,7 +51,7 @@
 
 		<panel title="Invoice Details">
 			<field name="company" required="true" readonlyIf="(status != 'Draft')"
-				onChange="action-gst-invoice-method-invoiceitems,action-gst-invoice-validate-company" />
+				onChange="action-gst-invoice-validate-company,action-gst-invoice-method-invoiceitems" />
 			<field name="party" required="true" readonlyIf="(status != 'Draft')"
 				onChange="action-gst-invoice-attrs-set-domain,action-gst-invoice-method-set-contact-invoiceadd,action-gst-invoice-method-invoiceitems,action-gst-invoice-validate-party" />
 			<field name="partyContact" readonlyIf="(status != 'Draft')" />
@@ -198,6 +199,6 @@
 
 	<action-export name="export.gst.invoice" output="${name}/${date}${time}"
 		download="true">
-		<export name="${reference}.xml" template="data-export/export-gst-invoice.st" />
+		<export name="${reference}.xml" template="data-export/export-gst-invoice.st"  />
 	</action-export>
 </object-views>
