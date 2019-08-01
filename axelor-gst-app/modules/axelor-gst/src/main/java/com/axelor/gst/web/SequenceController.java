@@ -9,11 +9,11 @@ import com.google.inject.Inject;
 
 public class SequenceController extends JpaSupport {
 
-  @Inject SequenceService services;
+  @Inject SequenceService sequenceservice;
 
   public void setSequenceNextNumber(ActionRequest request, ActionResponse response) {
     Sequence sequence = request.getContext().asType(Sequence.class);
-    String generatedsequence = services.generateSeq(sequence);
+    String generatedsequence = sequenceservice.generateSeq(sequence);
     response.setValue("nextNumbers", generatedsequence);
   }
 }

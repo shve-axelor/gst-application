@@ -13,16 +13,21 @@ public class InvoiceLineServiceImpl implements InvoiceLineService {
   public InvoiceLine calcluateInvoiceLineFields(InvoiceLine invoiceline, Invoice invoice) {
     Party party = invoice.getParty();
     Company company = invoice.getCompany();
-    BigDecimal netamount = BigDecimal.ZERO, igst = BigDecimal.ZERO, cgst = BigDecimal.ZERO, sgst = BigDecimal.ZERO, grossamount = BigDecimal.ZERO;
+    BigDecimal netamount = BigDecimal.ZERO,
+        igst = BigDecimal.ZERO,
+        cgst = BigDecimal.ZERO,
+        sgst = BigDecimal.ZERO,
+        grossamount = BigDecimal.ZERO,
+        gstrate = BigDecimal.ZERO;
     if (party != null && company != null) {
       Address invoiceaddress = invoice.getInvoiceAddress();
-      Address companyaddress = company.getAddressList();
+      Address companyaddress = company.getAddress();
       netamount = invoiceline.getPrice().multiply(BigDecimal.valueOf(invoiceline.getQty()));
       if (invoiceaddress.getState() != companyaddress.getState()) {
-        igst = netamount.multiply(invoiceline.getGstRate());
+        gstrate = invoiceline.getGstRate().divide(BigDecimal.valueOf(100));
+        igst = netamount.multiply(gstrate);
       } else {
-        BigDecimal gstrate = invoiceline.getGstRate();
-        gstrate = gstrate.divide(BigDecimal.valueOf(100));
+        gstrate = invoiceline.getGstRate().divide(BigDecimal.valueOf(100));
         BigDecimal multi = netamount.multiply(gstrate);
         sgst = multi.divide(BigDecimal.valueOf(2));
         cgst = sgst;

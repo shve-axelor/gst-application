@@ -10,7 +10,7 @@ import com.axelor.rpc.ActionResponse;
 import com.google.inject.Inject;
 
 public class InvoiceLineController extends JpaSupport {
-  @Inject InvoiceLineService service;
+  @Inject InvoiceLineService invoicelineservice;
 
   public void setItems(ActionRequest request, ActionResponse response) {
     InvoiceLine invoiceline = request.getContext().asType(InvoiceLine.class);
@@ -35,7 +35,7 @@ public class InvoiceLineController extends JpaSupport {
   public void setGstFields(ActionRequest request, ActionResponse response) {
     InvoiceLine invoiceline = request.getContext().asType(InvoiceLine.class);
     Invoice invoice = request.getContext().getParent().asType(Invoice.class);
-    invoiceline = service.calcluateInvoiceLineFields(invoiceline, invoice);
+    invoiceline = invoicelineservice.calcluateInvoiceLineFields(invoiceline, invoice);
     response.setValues(invoiceline);
   }
 }

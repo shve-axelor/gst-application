@@ -507,7 +507,7 @@ from gst_invoice as invoice
 left join gst_party as party on (invoice.party = party.id)
 left join gst_company as company on (invoice.company = company.id)
 left join gst_address as invoiceadd on (invoice.invoice_address = invoiceadd.id)
-left join gst_address as companyadd on (company.address_list = companyadd.id)
+left join gst_address as companyadd on (company.address = companyadd.id)
 left join gst_city as invoicecity on (invoiceadd.city = invoicecity.id)
 left join gst_state as invoicestate on (invoiceadd.state = invoicestate.id)
 left join gst_country as invoicecountry on (invoiceadd.country = invoicecountry.id)

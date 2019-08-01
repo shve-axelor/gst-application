@@ -15,18 +15,18 @@ import com.axelor.rpc.ActionResponse;
 import com.google.inject.Inject;
 
 public class InvoiceController extends JpaSupport {
-  @Inject InvoiceService service;
-  @Inject InvoiceLineService services;
+  @Inject InvoiceService invoiceservice;
+  @Inject InvoiceLineService invoicelineservice;
 
   public void setInvoiceItemsList(ActionRequest request, ActionResponse response) {
     Invoice invoice = request.getContext().asType(Invoice.class);
     List<InvoiceLine> invoicelinelist = new ArrayList<InvoiceLine>();
     if (invoice.getCompany() != null && invoice.getParty() != null) {
       if (invoice.getInvoiceAddress() != null) {
-        invoice = service.setPartyContactAddress(invoice);
+        invoice = invoiceservice.setPartyContactAddress(invoice);
         if (invoice.getInvoiceItemsList() != null && !invoice.getInvoiceItemsList().isEmpty()) {
           for (InvoiceLine invoiceline : invoice.getInvoiceItemsList()) {
-            invoiceline = services.calcluateInvoiceLineFields(invoiceline, invoice);
+            invoiceline = invoicelineservice.calcluateInvoiceLineFields(invoiceline, invoice);
             invoicelinelist.add(invoiceline);
           }
           response.setValue("invoiceItemsList", invoicelinelist);
@@ -39,19 +39,19 @@ public class InvoiceController extends JpaSupport {
     } else {
       response.setValue("invoiceItemsList", null);
     }
-    invoice = service.calculateInvoiceFields(invoice, invoice.getInvoiceItemsList());
+    invoice = invoiceservice.calculateInvoiceFields(invoice, invoice.getInvoiceItemsList());
   }
 
   public void setPartyContact(ActionRequest request, ActionResponse response) {
     Invoice invoice = request.getContext().asType(Invoice.class);
-    invoice = service.setPartyContactAddress(invoice);
+    invoice = invoiceservice.setPartyContactAddress(invoice);
     response.setValues(invoice);
   }
 
   public void setInvoiceNetFields(ActionRequest request, ActionResponse response) {
     Invoice invoice = request.getContext().asType(Invoice.class);
     List<InvoiceLine> invoicelinelist = invoice.getInvoiceItemsList();
-    invoice = service.calculateInvoiceFields(invoice, invoicelinelist);
+    invoice = invoiceservice.calculateInvoiceFields(invoice, invoicelinelist);
     response.setValues(invoice);
   }
 

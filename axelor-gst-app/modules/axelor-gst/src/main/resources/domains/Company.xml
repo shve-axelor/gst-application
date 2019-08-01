@@ -11,7 +11,7 @@
 	<one-to-many name="contactList" title="Contacts" ref="Contact"/>
 	<string name="gstin"  title="GstIn" />
 	<one-to-many name="bankDetailsList" title="BankDetails" ref="com.axelor.gst.db.BankAccount" />
-	<many-to-one name="addressList" title="Company Address" ref="com.axelor.gst.db.Address" />
+	<many-to-one name="address" title="Company Address" ref="com.axelor.gst.db.Address" />
 </entity>
 
 </domain-models>
