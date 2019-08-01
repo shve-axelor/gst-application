@@ -21,15 +21,14 @@ public class InvoiceLineController extends JpaSupport {
       invoiceline.setHsbn(product.getHsbn());
       invoiceline.setPrice(product.getSalePrice());
       invoiceline.setQty(1);
-      response.setValues(invoiceline);
     } else {
       invoiceline.setItem(null);
       invoiceline.setGstRate(null);
       invoiceline.setHsbn(null);
       invoiceline.setPrice(null);
       invoiceline.setQty(null);
-      response.setValues(invoiceline);
     }
+    response.setValues(invoiceline);
   }
 
   public void setGstFields(ActionRequest request, ActionResponse response) {

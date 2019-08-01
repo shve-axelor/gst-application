@@ -9,17 +9,17 @@ import com.axelor.inject.Beans;
 import com.google.inject.Inject;
 
 public class InvoiceRepo extends InvoiceRepository {
-  @Inject SequenceService services;
+  @Inject SequenceService sequenceservice;
 
   @Override
   public Invoice save(Invoice entity) {
     try {
       if (entity.getReference() == null) {
-        Sequence generateseqinvoice = services.generateSeqInvoice();
+        Sequence generateseqinvoice = sequenceservice.getSequenceObjectForParticularModel("Invoice");
         entity.setReference(generateseqinvoice.getNextNumbers());
         int nextnumber = Integer.parseInt(generateseqinvoice.getNextNumber()) + 1;
         generateseqinvoice.setNextNumber("" + nextnumber);
-        String generatedsequence = services.generateSeq(generateseqinvoice);
+        String generatedsequence = sequenceservice.generateSeq(generateseqinvoice);
         generateseqinvoice.setNextNumbers(generatedsequence);
         Beans.get(SequenceRepository.class).save(generateseqinvoice);
       }

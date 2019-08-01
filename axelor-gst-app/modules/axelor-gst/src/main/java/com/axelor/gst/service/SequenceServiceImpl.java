@@ -3,26 +3,10 @@ package com.axelor.gst.service;
 import com.axelor.gst.db.Sequence;
 import com.axelor.gst.db.repo.SequenceRepository;
 import com.axelor.inject.Beans;
-import com.google.inject.persist.Transactional;
 
 public class SequenceServiceImpl implements SequenceService {
 
   @Override
-  @Transactional
-  public Sequence generateSeqParty() {
-    Sequence sequence =
-        Beans.get(SequenceRepository.class)
-            .all()
-            .filter("self.model.name = ?1", "Party")
-            .fetchOne();
-    if (sequence != null) {
-      return sequence;
-    }
-    return null;
-  }
-
-  @Override
-  @Transactional
   public String generateSeq(Sequence sequence) {
     if (sequence != null) {
       String prefix = sequence.getPrefix();
@@ -32,8 +16,8 @@ public class SequenceServiceImpl implements SequenceService {
       String suffix = "";
       int countdigits = 0;
       int dummynumber = nextnumber;
-      while(dummynumber !=0) {
-        dummynumber = dummynumber/10;
+      while (dummynumber != 0) {
+        dummynumber = dummynumber / 10;
         countdigits++;
       }
       suffix = sequence.getSuffix();
@@ -51,13 +35,9 @@ public class SequenceServiceImpl implements SequenceService {
   }
 
   @Override
-  @Transactional
-  public Sequence generateSeqInvoice() {
+  public Sequence getSequenceObjectForParticularModel(String model) {
     Sequence sequence =
-        Beans.get(SequenceRepository.class)
-            .all()
-            .filter("self.model.name = ?1", "Invoice")
-            .fetchOne();
+        Beans.get(SequenceRepository.class).all().filter("self.model.name = ?1", model).fetchOne();
     if (sequence != null) {
       return sequence;
     }

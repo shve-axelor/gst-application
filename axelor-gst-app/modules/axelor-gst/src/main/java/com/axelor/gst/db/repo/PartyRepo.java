@@ -9,17 +9,17 @@ import com.axelor.inject.Beans;
 import com.google.inject.Inject;
 
 public class PartyRepo extends PartyRepository {
-  @Inject SequenceService services;
+  @Inject SequenceService sequenceservice;
 
   @Override
   public Party save(Party entity) {
     if (entity.getReference() == null) {
       try {
-        Sequence generateseqparty = services.generateSeqParty();
+        Sequence generateseqparty = sequenceservice.getSequenceObjectForParticularModel("Party");
         entity.setReference(generateseqparty.getNextNumbers());
         int nextnumber = Integer.parseInt(generateseqparty.getNextNumber()) + 1;
         generateseqparty.setNextNumber("" + nextnumber);
-        String generatedsequence = services.generateSeq(generateseqparty);
+        String generatedsequence = sequenceservice.generateSeq(generateseqparty);
         generateseqparty.setNextNumbers(generatedsequence);
         Beans.get(SequenceRepository.class).save(generateseqparty);
       } catch (Exception e) {
