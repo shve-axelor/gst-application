@@ -15,19 +15,7 @@ public class InvoiceLineController extends JpaSupport {
   public void setItems(ActionRequest request, ActionResponse response) {
     InvoiceLine invoiceline = request.getContext().asType(InvoiceLine.class);
     Product product = invoiceline.getProduct();
-    if (product != null) {
-      invoiceline.setItem("[" + product.getProductCode() + "]" + product.getProductName());
-      invoiceline.setGstRate(product.getGstRate());
-      invoiceline.setHsbn(product.getHsbn());
-      invoiceline.setPrice(product.getSalePrice());
-      invoiceline.setQty(1);
-    } else {
-      invoiceline.setItem(null);
-      invoiceline.setGstRate(null);
-      invoiceline.setHsbn(null);
-      invoiceline.setPrice(null);
-      invoiceline.setQty(null);
-    }
+    invoiceline = invoicelineservice.setProductInInvoiceline(product,invoiceline);
     response.setValues(invoiceline);
   }
 

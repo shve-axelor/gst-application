@@ -2,8 +2,6 @@ package com.axelor.gst.service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import com.axelor.gst.db.Address;
 import com.axelor.gst.db.Contact;
 import com.axelor.gst.db.Invoice;
@@ -41,29 +39,23 @@ public class InvoiceServiceImpl implements InvoiceService {
     Party party = invoice.getParty();
     if (party != null) {
       List<Contact> contactlist = party.getContactList();
-      contactlist = contactlist.stream().filter(c -> c.getType().equals("Primary")).collect(Collectors.toList());
-      if (contactlist != null && !contactlist.isEmpty()) {    
-        invoice.setPartyContact(contactlist.get(0));
-      } else {
-        invoice.setPartyContact(null);
-      }
+      Contact contact =
+          contactlist.stream().filter(c -> c.getType().equals("Primary")).findFirst().orElse(null);
+      invoice.setPartyContact(contact);
       List<Address> addresslist = party.getAddressList();
-      List<Address> invoiceaddresslist = addresslist.stream().filter(a -> a.getType().equals("invoice")).collect(Collectors.toList());
-      List<Address> shippingaddresslist = addresslist.stream().filter(a -> a.getType().equals("shipping")).collect(Collectors.toList());
-      if(invoiceaddresslist != null && !invoiceaddresslist.isEmpty()) {
-        invoice.setInvoiceAddress(invoiceaddresslist.get(0));
-      }else {
-        invoice.setInvoiceAddress(null);
-      }
+      Address invoiceaddress =
+          addresslist.stream().filter(a -> a.getType().equals("invoice")).findFirst().orElse(null);
+      Address shippingaddress =
+          addresslist.stream().filter(a -> a.getType().equals("shipping")).findFirst().orElse(null);
+      invoice.setInvoiceAddress(invoiceaddress);
+      invoice.setShippingAddress(shippingaddress);
       if (inInvoiceAddShippingAdd) {
         invoice.setShippingAddress(invoice.getInvoiceAddress());
-      }else {
-        if(shippingaddresslist != null && !shippingaddresslist.isEmpty()) {
-          invoice.setShippingAddress(shippingaddresslist.get(0));
-        }else {
-          invoice.setShippingAddress(null);
-        }
       }
+    } else {
+      invoice.setShippingAddress(null);
+      invoice.setInvoiceAddress(null);
+      invoice.setPartyContact(null);
     }
     return invoice;
   }

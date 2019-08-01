@@ -34,7 +34,7 @@
 			<field name="updatedOn" />
 		</panel>
 		<panel sidebar="true">
-			<field name="addressList" colSpan="12">
+			<field name="address" colSpan="12">
 				<viewer><![CDATA[
 			        <address>
 			       	<strong>{{record.type}}</strong><br>

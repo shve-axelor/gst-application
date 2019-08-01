@@ -21,29 +21,29 @@ public class InvoiceController extends JpaSupport {
   public void setInvoiceItemsList(ActionRequest request, ActionResponse response) {
     Invoice invoice = request.getContext().asType(Invoice.class);
     List<InvoiceLine> invoicelinelist = new ArrayList<InvoiceLine>();
-    if (invoice.getCompany() != null && invoice.getParty() != null) {
-      if (invoice.getInvoiceAddress() != null) {
-        invoice = invoiceservice.setPartyContactAddress(invoice);
-        if (invoice.getInvoiceItemsList() != null && !invoice.getInvoiceItemsList().isEmpty()) {
-          for (InvoiceLine invoiceline : invoice.getInvoiceItemsList()) {
-            invoiceline = invoicelineservice.calcluateInvoiceLineFields(invoiceline, invoice);
-            invoicelinelist.add(invoiceline);
-          }
-          response.setValue("invoiceItemsList", invoicelinelist);
+    if (invoice.getCompany() != null
+        && invoice.getParty() != null
+        && invoice.getInvoiceAddress() != null) {
+      if (invoice.getInvoiceItemsList() != null && !invoice.getInvoiceItemsList().isEmpty()) {
+        for (InvoiceLine invoiceline : invoice.getInvoiceItemsList()) {
+          invoiceline = invoicelineservice.calcluateInvoiceLineFields(invoiceline, invoice);
+          invoicelinelist.add(invoiceline);
         }
-        response.setValues(invoice);
-      } else {
-        response.setValue("invoiceItemsList", null);
-        response.setValue("shippingAddress", null);
+        invoice.setInvoiceItemsList(invoicelinelist);
       }
     } else {
-      response.setValue("invoiceItemsList", null);
+      invoice.setInvoiceItemsList(null);
+    }
+    if (invoice.getIsInvoiced()) {
+      invoice.setShippingAddress(invoice.getInvoiceAddress());
     }
     invoice = invoiceservice.calculateInvoiceFields(invoice, invoice.getInvoiceItemsList());
+    response.setValues(invoice);
   }
 
   public void setPartyContact(ActionRequest request, ActionResponse response) {
     Invoice invoice = request.getContext().asType(Invoice.class);
+   // System.out.println(request.getContext().get("party"));
     invoice = invoiceservice.setPartyContactAddress(invoice);
     response.setValues(invoice);
   }

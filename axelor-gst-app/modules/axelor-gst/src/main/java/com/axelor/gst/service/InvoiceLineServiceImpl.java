@@ -6,6 +6,7 @@ import com.axelor.gst.db.Company;
 import com.axelor.gst.db.Invoice;
 import com.axelor.gst.db.InvoiceLine;
 import com.axelor.gst.db.Party;
+import com.axelor.gst.db.Product;
 
 public class InvoiceLineServiceImpl implements InvoiceLineService {
 
@@ -39,6 +40,26 @@ public class InvoiceLineServiceImpl implements InvoiceLineService {
     invoiceline.setsGst(sgst);
     invoiceline.setcGst(cgst);
     invoiceline.setGrossAmount(grossamount);
+    return invoiceline;
+  }
+
+  @Override
+  public InvoiceLine setProductInInvoiceline(Product product, InvoiceLine invoiceline) {
+    if (product != null) {
+      invoiceline.setItem("[" + product.getProductCode() + "]" + product.getProductName());
+      invoiceline.setGstRate(product.getGstRate());
+      invoiceline.setHsbn(product.getHsbn());
+      invoiceline.setPrice(product.getSalePrice());
+      invoiceline.setQty(1);
+      invoiceline.setNetAmount(product.getSalePrice());
+    } else {
+      invoiceline.setItem(null);
+      invoiceline.setGstRate(null);
+      invoiceline.setHsbn(null);
+      invoiceline.setPrice(null);
+      invoiceline.setQty(null);
+      invoiceline.setNetAmount(null);
+    }
     return invoiceline;
   }
 }

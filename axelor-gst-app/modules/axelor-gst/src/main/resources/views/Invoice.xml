@@ -30,7 +30,7 @@
 	</grid>
 
 	<form model="com.axelor.gst.db.Invoice" title="Invoices" name="invoice-form"
-		onNew="action-gst-invoice-record-default-dt,action-gst-invoice-validate-company,action-gst-invoice-method-invoiceitems,action-gst-invoice-method-set-invoiceline">
+		onNew="action-gst-invoice-group-invoiceform-onnew">
 		<toolbar>
 			<button name="btn-print-invoice-report" showIf="id"
 				onClick="action-gst-invoice-method-report-print,action-gst-invoice-report-print"
@@ -50,13 +50,13 @@
 
 		<panel title="Invoice Details">
 			<field name="company" required="true" readonlyIf="(status != 'Draft')"
-				onChange="action-gst-invoice-validate-company,action-gst-invoice-method-invoiceitems" />
+				onChange="action-gst-invoice-validate-company,action-gst-invoice-method-calculateinvoiceitems" />
 			<field name="party" required="true" readonlyIf="(status != 'Draft')"
-				onChange="action-gst-invoice-attrs-set-domain,action-gst-invoice-method-set-contact-invoiceadd,action-gst-invoice-method-invoiceitems,action-gst-invoice-validate-party" />
+				onChange="action-gst-invoice-group-party-onchange" />
 			<field name="partyContact" readonlyIf="(status != 'Draft')" />
 			<field name="priority" readonlyIf="(status == 'Paid' || status == 'Cancelled')" />
 			<field name="invoiceAddress" required="true" readonlyIf="(status != 'Draft')"
-				onChange="action-gst-invoice-method-invoiceitems" />
+				onChange="action-gst-invoice-method-calculateinvoiceitems" />
 			<field name="shippingAddress" readonlyIf="(status != 'Draft')" />
 			<field name="isInvoiced" title="InvoiceAddress As ShippingAddress"
 				onChange="action-gst-invoice-method-set-contact-invoiceadd"
@@ -69,9 +69,8 @@
 				onChange="action-gst-invoice-method-calculatefields" />
 		</panel>
 		<panel sidebar="true">
-			<button name="btn-draft" title="draft" hidden="true"
-				colSpan="12" onClick="action-gst-invoice-attrs-status-draft"
-				showIf="status == 'Validated'" />
+			<button name="btn-draft" title="draft" hidden="true" colSpan="12"
+				onClick="action-gst-invoice-attrs-status-draft" showIf="status == 'Validated'" />
 			<button name="btn-validated" title="validated" hidden="true"
 				colSpan="12" onClick="save,action-gst-invoice-attrs-status-validated"
 				showIf="status == 'Draft'" />
@@ -99,9 +98,8 @@
 		</panel-mail>
 	</form>
 
-	<kanban name="invoice-kanban" title="Invoices"
-		model="com.axelor.gst.db.Invoice" columnBy="status" sequenceBy="priority"
-		limit="10">
+	<kanban name="invoice-kanban" title="Invoices" model="com.axelor.gst.db.Invoice"
+		columnBy="status" sequenceBy="priority" limit="10">
 		<field name="company" />
 		<field name="party" />
 		<field name="priority" />
@@ -122,9 +120,12 @@
 	</kanban>
 
 	<action-attrs name="action-gst-invoice-attrs-set-domain">
-		<attribute name="domain" for="partyContact" expr="self.party = :party" />
-		<attribute name="domain" for="invoiceAddress" expr="self.party = :party" />
-		<attribute name="domain" for="shippingAddress" expr="self.party = :party" />
+		<attribute name="domain" for="partyContact"
+			expr="self.party = :party" />
+		<attribute name="domain" for="invoiceAddress"
+			expr="self.party = :party" />
+		<attribute name="domain" for="shippingAddress"
+			expr="self.party = :party" />
 	</action-attrs>
 
 	<action-attrs name="action-gst-invoice-attrs-status-draft">
@@ -153,7 +154,7 @@
 		<field name="company" expr="eval: __repo__(Company).all().fetchOne() " />
 	</action-record>
 
-	<action-method name="action-gst-invoice-method-invoiceitems">
+	<action-method name="action-gst-invoice-method-calculateinvoiceitems">
 		<call class="com.axelor.gst.web.InvoiceController" method="setInvoiceItemsList" />
 	</action-method>
 
@@ -182,7 +183,7 @@
 
 	<action-validate name="action-gst-invoice-validate-company">
 		<error message="Company Address is Null Please Fill It First."
-			if="company != null &amp;&amp; (company.addressList == null)" />
+			if="company != null &amp;&amp; (company.address == null)" />
 	</action-validate>
 
 	<action-validate name="action-gst-invoice-validate-status">
@@ -195,6 +196,18 @@
 		download="true">
 		<export name="${reference}.xml" template="data-export/export-gst-invoice.st" />
 	</action-export>
+	<action-group name="action-gst-invoice-group-party-onchange">
+		<action name="action-gst-invoice-method-set-contact-invoiceadd" />
+		<action name="action-gst-invoice-attrs-set-domain" />
+		<action name="action-gst-invoice-method-calculateinvoiceitems" />
+		<action name="action-gst-invoice-validate-party" />
+	</action-group>
 
-
+	<action-group name="action-gst-invoice-group-invoiceform-onnew">
+		<action name="action-gst-invoice-record-default-dt" />
+		<action name="action-gst-invoice-validate-company" />
+		<action name="action-gst-invoice-method-set-contact-invoiceadd" />
+		<action name="action-gst-invoice-method-calculateinvoiceitems" />
+		<action name="action-gst-invoice-method-set-invoiceline" />
+	</action-group>
 </object-views>
