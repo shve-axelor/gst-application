@@ -8,6 +8,9 @@ import com.axelor.gst.db.Contact;
 import com.axelor.gst.db.Invoice;
 import com.axelor.gst.db.InvoiceLine;
 import com.axelor.gst.db.Party;
+import com.axelor.gst.db.Product;
+import com.axelor.gst.db.repo.ProductRepository;
+import com.axelor.inject.Beans;
 
 public class InvoiceServiceImpl implements InvoiceService {
   @Override
@@ -60,5 +63,12 @@ public class InvoiceServiceImpl implements InvoiceService {
       invoice.setPartyContact(null);
     }
     return invoice;
+  }
+
+  @Override
+  public List<Product> getSelectedProducts(List<Integer> ids) { // TODO Auto-generated method stub
+    List<Product> productlists =
+        Beans.get(ProductRepository.class).all().filter("self.id in (?1)", ids).fetch();
+    return productlists;
   }
 }

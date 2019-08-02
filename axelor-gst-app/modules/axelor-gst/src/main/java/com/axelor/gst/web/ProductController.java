@@ -7,13 +7,11 @@ import com.axelor.gst.db.Product;
 import com.axelor.gst.db.ProductCategory;
 import com.axelor.gst.service.InvoiceLineService;
 import com.axelor.gst.service.InvoiceService;
-import com.axelor.gst.service.ProductService;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.google.inject.Inject;
 
 public class ProductController extends JpaSupport {
-  @Inject ProductService productservice;
   @Inject InvoiceService invoiceservice;
   @Inject InvoiceLineService invoicelineservice;
 

@@ -16,7 +16,6 @@ import com.axelor.gst.db.repo.CompanyRepository;
 import com.axelor.gst.db.repo.PartyRepository;
 import com.axelor.gst.service.InvoiceLineService;
 import com.axelor.gst.service.InvoiceService;
-import com.axelor.gst.service.ProductService;
 import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
@@ -26,7 +25,6 @@ import com.google.inject.Inject;
 public class InvoiceController extends JpaSupport {
   @Inject InvoiceService invoiceservice;
   @Inject InvoiceLineService invoicelineservice;
-  @Inject ProductService productservice;
 
   public void setInvoiceItemsList(ActionRequest request, ActionResponse response) {
     Invoice invoice = request.getContext().asType(Invoice.class);
@@ -57,7 +55,7 @@ public class InvoiceController extends JpaSupport {
     if (ct.get("productlist") != null) {
       Invoice invoice = ct.asType(Invoice.class);
       List<Integer> idList = (List<Integer>) ct.get("productlist");
-      List<Product> productlist = productservice.getSelectedProducts(idList);
+      List<Product> productlist = invoiceservice.getSelectedProducts(idList);
       List<InvoiceLine> invoicelinelist = new ArrayList<InvoiceLine>();
       Company company = null;
       if (ct.get("selectedparty") != null) {
