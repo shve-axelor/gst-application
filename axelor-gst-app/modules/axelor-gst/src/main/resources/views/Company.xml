@@ -10,7 +10,7 @@
 		<field name="contactList.type" widget="Editor" />
 		<field name="gstin" />
 		<field name="bankDetailsList.type" />
-		<field name="addressList.type" />
+		<field name="address.type" />
 	</grid>
 
 	<form model="com.axelor.gst.db.Company" title="Companies" name="company-form">

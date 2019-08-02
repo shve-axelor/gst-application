@@ -7,7 +7,7 @@
   
   <entity name="Contact">
   	<string name="name" title="Name" />
-  	<string name="type" title="Type"  selection="gst.gst.contact.type.select" />
+  	<string name="type" title="Contact Type"  selection="gst.gst.contact.type.select" />
   	<string name="primaryEmail" title="Primary Email-Id" />
   	<string name="secondaryEmail" title="Secondary Email-Id"  />
   	<string name="primaryPhone" title="Primary Phone" />

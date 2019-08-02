@@ -2,6 +2,7 @@ package com.axelor.gst.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 import com.axelor.gst.db.Address;
 import com.axelor.gst.db.Contact;
 import com.axelor.gst.db.Invoice;
@@ -43,15 +44,16 @@ public class InvoiceServiceImpl implements InvoiceService {
           contactlist.stream().filter(c -> c.getType().equals("Primary")).findFirst().orElse(null);
       invoice.setPartyContact(contact);
       List<Address> addresslist = party.getAddressList();
+      Address defaultaddress =
+          addresslist.stream().filter(a -> a.getType().equals("default")).findFirst().orElse(null);
       Address invoiceaddress =
           addresslist.stream().filter(a -> a.getType().equals("invoice")).findFirst().orElse(null);
       Address shippingaddress =
           addresslist.stream().filter(a -> a.getType().equals("shipping")).findFirst().orElse(null);
-      invoice.setInvoiceAddress(invoiceaddress);
-      invoice.setShippingAddress(shippingaddress);
-      if (inInvoiceAddShippingAdd) {
-        invoice.setShippingAddress(invoice.getInvoiceAddress());
-      }
+      shippingaddress = shippingaddress == null ? defaultaddress : shippingaddress;
+      invoice.setInvoiceAddress(invoiceaddress == null ? defaultaddress : invoiceaddress);
+      invoice.setShippingAddress(
+          inInvoiceAddShippingAdd ? invoice.getInvoiceAddress() : shippingaddress);
     } else {
       invoice.setShippingAddress(null);
       invoice.setInvoiceAddress(null);

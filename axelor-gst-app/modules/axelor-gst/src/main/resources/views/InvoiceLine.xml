@@ -27,7 +27,7 @@
 				onChange="action-gst-invoiceline-method-items,action-gst-invoiceline-method-setgst" />
 			<field name="hsbn" />
 			<field name="item" required="true" />
-			<field name="qty" onChange="action-gst-invoiceline-method-setgst" />
+			<field name="qty" min="1" onChange="action-gst-invoiceline-method-setgst" />
 			<field name="price" min="1"
 				onChange="action-gst-invoiceline-method-setgst" />
 			<field name="netAmount" readonly="true" />

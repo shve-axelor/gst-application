@@ -99,7 +99,8 @@
 	</form>
 
 	<kanban name="invoice-kanban" title="Invoices" model="com.axelor.gst.db.Invoice"
-		columnBy="status" sequenceBy="priority" limit="10">
+		onMove="action-gst-invcoie-validate-kanban-onmove" columnBy="status"
+		sequenceBy="priority" limit="10">
 		<field name="company" />
 		<field name="party" />
 		<field name="priority" />
@@ -120,12 +121,9 @@
 	</kanban>
 
 	<action-attrs name="action-gst-invoice-attrs-set-domain">
-		<attribute name="domain" for="partyContact"
-			expr="self.party = :party" />
-		<attribute name="domain" for="invoiceAddress"
-			expr="self.party = :party" />
-		<attribute name="domain" for="shippingAddress"
-			expr="self.party = :party" />
+		<attribute name="domain" for="partyContact" expr="self.party = :party" />
+		<attribute name="domain" for="invoiceAddress" expr="self.party = :party" />
+		<attribute name="domain" for="shippingAddress" expr="self.party = :party" />
 	</action-attrs>
 
 	<action-attrs name="action-gst-invoice-attrs-status-draft">
@@ -192,10 +190,18 @@
 			if="(invoiceItemsList.isEmpty())" />
 	</action-validate>
 
+	<action-validate name="action-gst-invcoie-validate-kanban-onmove">
+		<error message="Invoice Cannot Be Draft Or Validated Once Paid Or Cancelled."
+			if="__self__.status == 'Paid' || __self__.status == 'Cancelled'" />
+		<error message="Invoice Cannot Be Paid Or Cancelled Directly."
+			if="(__self__.status == 'Draft' &amp;&amp; status == 'Paid') || (__self__.status == 'Draft' &amp;&amp; status == 'Cancelled')" />
+	</action-validate>
+
 	<action-export name="export.gst.invoice" output="${name}/${date}${time}"
 		download="true">
 		<export name="${reference}.xml" template="data-export/export-gst-invoice.st" />
 	</action-export>
+
 	<action-group name="action-gst-invoice-group-party-onchange">
 		<action name="action-gst-invoice-method-set-contact-invoiceadd" />
 		<action name="action-gst-invoice-attrs-set-domain" />
@@ -210,4 +216,5 @@
 		<action name="action-gst-invoice-method-calculateinvoiceitems" />
 		<action name="action-gst-invoice-method-set-invoiceline" />
 	</action-group>
+
 </object-views>

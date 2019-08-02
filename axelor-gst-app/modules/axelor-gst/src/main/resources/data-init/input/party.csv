@@ -1,0 +1,4 @@
+name,type,gstin,c1,c2,addline1,addline2,addtype,addcountry,addstate,addcity,addpin
+Audi,Company,123456789789456,Shubh,,tyui,tyui,invoice,India,Gujarat,Surat,890 098
+BMW,Company,789456132987654,Shubh,Parth,uiop,uiop,invoice,India,Pune,Maharashtra,456 456
+Mg Hector,Individual,147852369789456,,Parth,qwerty,qwerty,shipping,India,Mumbai,Maharashtra,900 009

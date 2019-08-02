@@ -27,7 +27,7 @@
 			<field name="line1" required="true" />
 			<field name="line2" />
 			<field name="city" required="true" />
-			<field name="state" />
+			<field name="state" required="true"/>
 			<field name="country" required="true" />
 			<field name="pincode" />
 		</panel>

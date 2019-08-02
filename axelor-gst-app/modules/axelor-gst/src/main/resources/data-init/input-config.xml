@@ -7,5 +7,37 @@
 	<input file="state.csv" type="com.axelor.gst.db.State"/>
 	<input file="city.csv" type="com.axelor.gst.db.City" />
 	<input file="sequence.csv" type="com.axelor.gst.db.Sequence" />
-	<input file="productcategory.csv" type="com.axelor.gst.db.ProductCategory"></input>
+	<input file="productcategory.csv" type="com.axelor.gst.db.ProductCategory" />
+	<input file="product.csv" type="com.axelor.gst.db.Product" />
+<!-- 	<input file="address.csv" type="com.axelor.gst.db.Address"> -->
+<!-- 		<bind to="computeraddress" eval="SHUBH" /> -->
+<!-- 	</input> -->
+ 	<input file="contact.csv" type="com.axelor.gst.db.Contact" />
+ 	
+ 	<input file="company.csv" type="com.axelor.gst.db.Company">
+<!--  		<bind to="address" column="p1" search="self.type = :p1" /> -->
+  		<bind to="contactList" column="c1" search="self.name in :c1" />
+  		<bind to="contactList" column="c2" search="self.name in :c2" />
+  		<bind to="bankList" column="b1" search="self.bank in :b1" />
+ 	</input>
+ 	
+ 	<input file="bank.csv" type="com.axelor.gst.db.BankAccount">
+<!--  		<bind to="address" column="a1" search="self.type = :a1" /> -->
+ 	</input>
+ 	
+<!--  	<input file="party.csv" type="com.axelor.gst.db.Party" > -->
+<!--  		<bind to="contactList" column="c1" search="self.name in :c1" /> -->
+<!--   		<bind to="contactList" column="c2" search="self.name in :c2" /> -->
+<!--   		<bind to="addressList">  -->
+<!--    			<bind to="type" column="addtype" />  -->
+<!--    			<bind to="line1" column="addline1" />  -->
+<!--    			<bind to="line2" column="addline2"/>  -->
+<!--    			<bind to="country" column="addcountry" search="self.name = :addcountry" />  -->
+<!--    			<bind to="state" column="addstate" search="self.name = :addstate" />  -->
+<!--    			<bind to="city" column="addcity" search="self.name = :addcity"/>  -->
+<!--    			<bind to="pincode" column="addpin"/>  -->
+<!--    			<bind to="computeaddress" eval="${addline1},.${addline2},.${addcity}-.${addpin},.${addstate},.${addcountry}" /> -->
+<!--    		</bind>  -->
+<!--  	</input> -->
+	
 </csv-inputs>

@@ -43,7 +43,6 @@ public class InvoiceController extends JpaSupport {
 
   public void setPartyContact(ActionRequest request, ActionResponse response) {
     Invoice invoice = request.getContext().asType(Invoice.class);
-   // System.out.println(request.getContext().get("party"));
     invoice = invoiceservice.setPartyContactAddress(invoice);
     response.setValues(invoice);
   }

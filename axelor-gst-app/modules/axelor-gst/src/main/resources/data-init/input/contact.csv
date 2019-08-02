@@ -1,0 +1,4 @@
+name,type,primaryEmail,secondaryEmail,primaryPhone,secondaryPhone
+Shubh,Primary,abc@gmail.com,def@gmail.com,1234567890,9087654321
+Sachin,Secondary,dfg@gmail.com,rty@gmail.com,5647382910,1236547890
+Parth,Others,uio@gmail.com,jkl@gmail.com,8908908900,6786786786
