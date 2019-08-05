@@ -2051,12 +2051,78 @@ where inline.invoice = ?;]]></xml-property>
                 </structure>
                 <structure>
                     <property name="name">Aggregation</property>
-                    <property name="dataType">float</property>
+                    <text-property name="displayName">total_qty</text-property>
+                    <property name="dataType">decimal</property>
                     <property name="aggregateFunction">SUM</property>
                     <list-property name="arguments">
                         <structure>
                             <property name="name">Expression</property>
                             <expression name="value" type="javascript">row["qty"]</expression>
+                        </structure>
+                    </list-property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Aggregation_1</property>
+                    <text-property name="displayName">total_netamount</text-property>
+                    <property name="dataType">decimal</property>
+                    <property name="aggregateFunction">SUM</property>
+                    <list-property name="arguments">
+                        <structure>
+                            <property name="name">Expression</property>
+                            <expression name="value" type="javascript">row["net_amount"]</expression>
+                        </structure>
+                    </list-property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Aggregation_2</property>
+                    <text-property name="displayName">total_igst</text-property>
+                    <property name="dataType">decimal</property>
+                    <property name="aggregateFunction">SUM</property>
+                    <list-property name="arguments">
+                        <structure>
+                            <property name="name">Expression</property>
+                            <expression name="value" type="javascript">row["i_gst"]</expression>
+                        </structure>
+                    </list-property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Aggregation_3</property>
+                    <text-property name="displayName">total_sgst</text-property>
+                    <property name="dataType">decimal</property>
+                    <property name="aggregateFunction">SUM</property>
+                    <list-property name="arguments">
+                        <structure>
+                            <property name="name">Expression</property>
+                            <expression name="value" type="javascript">row["s_gst"]</expression>
+                        </structure>
+                    </list-property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Aggregation_4</property>
+                    <text-property name="displayName">total_cgst</text-property>
+                    <property name="dataType">decimal</property>
+                    <property name="aggregateFunction">SUM</property>
+                    <list-property name="arguments">
+                        <structure>
+                            <property name="name">Expression</property>
+                            <expression name="value" type="javascript">row["c_gst"]</expression>
+                        </structure>
+                    </list-property>
+                    <property name="allowExport">true</property>
+                </structure>
+                <structure>
+                    <property name="name">Aggregation_5</property>
+                    <text-property name="displayName">total_grossamount</text-property>
+                    <property name="dataType">decimal</property>
+                    <property name="aggregateFunction">SUM</property>
+                    <list-property name="arguments">
+                        <structure>
+                            <property name="name">Expression</property>
+                            <expression name="value" type="javascript">row["gross_amount"]</expression>
                         </structure>
                     </list-property>
                     <property name="allowExport">true</property>
@@ -2301,103 +2367,55 @@ where inline.invoice = ?;]]></xml-property>
                         </label>
                     </cell>
                     <cell id="143">
-                        <data id="416">
-                            <property name="borderLeftStyle">solid</property>
-                            <property name="borderLeftWidth">thin</property>
-                            <property name="borderRightStyle">solid</property>
-                            <property name="borderRightWidth">thin</property>
+                        <text-data id="422">
+                            <property name="fontWeight">bold</property>
                             <property name="textAlign">center</property>
-                            <property name="resultSetColumn">Aggregation</property>
-                        </data>
+                            <expression name="valueExpr">row["Aggregation"]</expression>
+                            <property name="contentType">html</property>
+                        </text-data>
                     </cell>
                     <cell id="144"/>
                     <cell id="145">
-                        <property name="colSpan">5</property>
+                        <property name="colSpan">1</property>
                         <property name="rowSpan">1</property>
-                        <table id="380">
-                            <property name="dataSet">Invoice</property>
-                            <list-property name="boundDataColumns">
-                                <structure>
-                                    <property name="name">net_amount</property>
-                                    <text-property name="displayName">net_amount</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["net_amount"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">gross_amount</property>
-                                    <text-property name="displayName">gross_amount</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["gross_amount"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">net_igst</property>
-                                    <text-property name="displayName">net_igst</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["net_igst"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">net_cgst</property>
-                                    <text-property name="displayName">net_cgst</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["net_cgst"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                                <structure>
-                                    <property name="name">net_sgst</property>
-                                    <text-property name="displayName">net_sgst</text-property>
-                                    <expression name="expression" type="javascript">dataSetRow["net_sgst"]</expression>
-                                    <property name="dataType">decimal</property>
-                                </structure>
-                            </list-property>
-                            <column id="409"/>
-                            <column id="410"/>
-                            <column id="411"/>
-                            <column id="412"/>
-                            <column id="413"/>
-                            <detail>
-                                <row id="392">
-                                    <cell id="393">
-                                        <data id="394">
-                                            <property name="borderLeftStyle">solid</property>
-                                            <property name="borderLeftWidth">thin</property>
-                                            <property name="borderRightStyle">solid</property>
-                                            <property name="borderRightWidth">thin</property>
-                                            <property name="textAlign">center</property>
-                                            <property name="resultSetColumn">net_amount</property>
-                                        </data>
-                                    </cell>
-                                    <cell id="395">
-                                        <data id="398">
-                                            <property name="borderRightStyle">solid</property>
-                                            <property name="borderRightWidth">thin</property>
-                                            <property name="textAlign">center</property>
-                                            <property name="resultSetColumn">net_igst</property>
-                                        </data>
-                                    </cell>
-                                    <cell id="397">
-                                        <data id="402">
-                                            <property name="borderRightStyle">solid</property>
-                                            <property name="borderRightWidth">thin</property>
-                                            <property name="textAlign">center</property>
-                                            <property name="resultSetColumn">net_sgst</property>
-                                        </data>
-                                    </cell>
-                                    <cell id="399">
-                                        <data id="400">
-                                            <property name="borderRightStyle">solid</property>
-                                            <property name="borderRightWidth">thin</property>
-                                            <property name="textAlign">center</property>
-                                            <property name="resultSetColumn">net_cgst</property>
-                                        </data>
-                                    </cell>
-                                    <cell id="401">
-                                        <data id="396">
-                                            <property name="textAlign">center</property>
-                                            <property name="resultSetColumn">gross_amount</property>
-                                        </data>
-                                    </cell>
-                                </row>
-                            </detail>
-                        </table>
+                        <text-data id="423">
+                            <property name="fontWeight">bold</property>
+                            <property name="textAlign">center</property>
+                            <expression name="valueExpr">row["Aggregation_1"]</expression>
+                            <property name="contentType">html</property>
+                        </text-data>
+                    </cell>
+                    <cell id="417">
+                        <text-data id="424">
+                            <property name="fontWeight">bold</property>
+                            <property name="textAlign">center</property>
+                            <expression name="valueExpr">row["Aggregation_2"]</expression>
+                            <property name="contentType">html</property>
+                        </text-data>
+                    </cell>
+                    <cell id="418">
+                        <text-data id="425">
+                            <property name="fontWeight">bold</property>
+                            <property name="textAlign">center</property>
+                            <expression name="valueExpr">row["Aggregation_3"]</expression>
+                            <property name="contentType">html</property>
+                        </text-data>
+                    </cell>
+                    <cell id="419">
+                        <text-data id="426">
+                            <property name="fontWeight">bold</property>
+                            <property name="textAlign">center</property>
+                            <expression name="valueExpr">row["Aggregation_4"]</expression>
+                            <property name="contentType">html</property>
+                        </text-data>
+                    </cell>
+                    <cell id="420">
+                        <text-data id="427">
+                            <property name="fontWeight">bold</property>
+                            <property name="textAlign">center</property>
+                            <expression name="valueExpr">row["Aggregation_5"]</expression>
+                            <property name="contentType">html</property>
+                        </text-data>
                     </cell>
                 </row>
             </footer>

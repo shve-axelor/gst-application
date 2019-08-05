@@ -30,7 +30,7 @@
 	</grid>
 
 	<form model="com.axelor.gst.db.Invoice" title="Invoices" name="invoice-form"
-		onNew="action-gst-invoice-group-invoiceform-onnew">
+		onNew="action-gst-invoice-group-invoiceform-onnew" onSave="action-gst-invoice-method-set-reference">
 		<toolbar>
 			<button name="btn-print-invoice-report" showIf="id"
 				onClick="action-gst-invoice-method-report-print,action-gst-invoice-report-print"
@@ -172,6 +172,10 @@
 
 	<action-method name="action-gst-invoice-method-report-print">
 		<call class="com.axelor.gst.web.InvoiceController" method="getImagePath" />
+	</action-method>
+
+	<action-method name="action-gst-invoice-method-set-reference">
+		<call class="com.axelor.gst.web.SequenceController" method="setReference" />
 	</action-method>
 
 	<action-validate name="action-gst-invoice-validate-party">
