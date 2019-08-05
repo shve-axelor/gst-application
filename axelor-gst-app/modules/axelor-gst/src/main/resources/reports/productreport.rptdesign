@@ -568,7 +568,7 @@ order by pro.id;]]></xml-property>
                             <property name="rowSpan">3</property>
                             <image id="31">
                                 <property name="height">0.8541666666666666in</property>
-                                <property name="width">2.5729166666666665in</property>
+                                <property name="width">2.4583333333333335in</property>
                                 <property name="source">embed</property>
                                 <property name="imageName">logo.png</property>
                             </image>
@@ -695,6 +695,12 @@ order by pro.id;]]></xml-property>
                             <property name="borderTopStyle">none</property>
                             <property name="height">1.1145833333333333in</property>
                             <property name="width">1.6354166666666667in</property>
+                            <list-property name="visibility">
+                                <structure>
+                                    <property name="format">all</property>
+                                    <expression name="valueExpr" type="javascript">row["file_path"]== null;</expression>
+                                </structure>
+                            </list-property>
                             <property name="source">file</property>
                             <expression name="uri" type="javascript">params["attachments"].value+row["file_path"]</expression>
                         </image>

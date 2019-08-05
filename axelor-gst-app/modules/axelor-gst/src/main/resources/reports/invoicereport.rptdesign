@@ -1670,16 +1670,25 @@ where inline.invoice = ?;]]></xml-property>
                         </structure>
                     </list-property>
                     <column id="20">
-                        <property name="width">1.877in</property>
+                        <property name="width">0.057in</property>
                     </column>
-                    <column id="21"/>
+                    <column id="21">
+                        <property name="fontSize">10pt</property>
+                        <property name="width">4.9in</property>
+                    </column>
                     <row id="22">
                         <cell id="23">
                             <property name="colSpan">1</property>
                             <property name="rowSpan">3</property>
                             <image id="318">
                                 <property name="height">1.1875in</property>
-                                <property name="width">1.7604166666666667in</property>
+                                <property name="width">1.34375in</property>
+                                <list-property name="visibility">
+                                    <structure>
+                                        <property name="format">all</property>
+                                        <expression name="valueExpr" type="javascript">row["file_path"]==null;</expression>
+                                    </structure>
+                                </list-property>
                                 <property name="source">file</property>
                                 <expression name="uri" type="javascript">params["attachment"].value+row["file_path"]</expression>
                             </image>

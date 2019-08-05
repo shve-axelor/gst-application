@@ -93,7 +93,7 @@
 			<field name="grossAmount" readonly="true" />
 		</panel>
 
-		<panel-mail title="Tracker" sidebar="true">
+		<panel-mail title="Tracker" colSpan="12">
 			<mail-messages limit="4" />
 		</panel-mail>
 	</form>
